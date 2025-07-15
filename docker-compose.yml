@@ -8,3 +8,9 @@ services:
     restart: always
     ports:
       - "${FRONTEND_PORT:-3000}:80"
+    networks:
+      - haivler_network
+
+networks:
+  haivler_network:
+    external: true
