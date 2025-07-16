@@ -12,7 +12,13 @@ RUN npm install --only=production
 # Copy source code
 COPY . .
 
-# Build the app
+# Accept build-time environment variables
+ARG REACT_APP_API_URL=http://localhost:8000
+
+# Debug: Show what URL is being used
+RUN echo "Building with API URL: $REACT_APP_API_URL"
+
+# Build the app with the environment variable
 RUN npm run build
 
 # Production stage
