@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import styled from 'styled-components';
-import HaivlerAPI from '../services/api';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
+import HaivlerAPI from "../services/api";
 
 const CreatePostContainer = styled.div`
   max-width: 600px;
@@ -10,7 +10,7 @@ const CreatePostContainer = styled.div`
   padding: 2rem;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -30,11 +30,11 @@ const Input = styled.input`
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 1rem;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 `;
 
@@ -45,11 +45,11 @@ const TextArea = styled.textarea`
   font-size: 1rem;
   min-height: 100px;
   resize: vertical;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
 `;
 
@@ -58,7 +58,7 @@ const FileInput = styled.input`
   border: 2px dashed #ddd;
   border-radius: 4px;
   background: #f8f9fa;
-  
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -68,12 +68,12 @@ const FileInput = styled.input`
 const ImagePreview = styled.div`
   margin-top: 1rem;
   text-align: center;
-  
+
   img {
     max-width: 100%;
     max-height: 300px;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -85,11 +85,11 @@ const Button = styled.button`
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  
+
   &:hover {
     background: #218838;
   }
-  
+
   &:disabled {
     background: #ccc;
     cursor: not-allowed;
@@ -104,7 +104,7 @@ const CancelButton = styled.button`
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
-  
+
   &:hover {
     background: #545b62;
   }
@@ -117,22 +117,22 @@ const ButtonGroup = styled.div`
 
 const CreatePost = () => {
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    image: null
+    title: "",
+    description: "",
+    image: null,
   });
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    if (e.target.name === 'image') {
+    if (e.target.name === "image") {
       const file = e.target.files[0];
       setFormData({
         ...formData,
-        image: file
+        image: file,
       });
-      
+
       // Create preview
       if (file) {
         const reader = new FileReader();
@@ -146,39 +146,40 @@ const CreatePost = () => {
     } else {
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.image) {
-      toast.error('Please select an image');
+      toast.error("Please select an image");
       return;
     }
 
     setLoading(true);
 
     try {
+      console.log("formData", formData);
       const result = await HaivlerAPI.createPost(formData);
-      
+
       if (result.success) {
-        toast.success('Post created successfully!');
-        navigate('/');
+        toast.success("Post created successfully!");
+        navigate("/");
       } else {
         toast.error(result.error);
       }
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -213,7 +214,7 @@ const CreatePost = () => {
         )}
         <ButtonGroup>
           <Button type="submit" disabled={loading}>
-            {loading ? 'Creating Post...' : 'Create Post'}
+            {loading ? "Creating Post..." : "Create Post"}
           </Button>
           <CancelButton type="button" onClick={handleCancel}>
             Cancel

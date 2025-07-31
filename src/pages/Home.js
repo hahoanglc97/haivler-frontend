@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import styled from 'styled-components';
-import { FaThumbsUp, FaThumbsDown, FaComment, FaUser } from 'react-icons/fa';
-import HaivlerAPI from '../services/api';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import styled from "styled-components";
+import { FaThumbsUp, FaThumbsDown, FaComment, FaUser } from "react-icons/fa";
+import HaivlerAPI from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 const HomeContainer = styled.div`
   max-width: 800px;
@@ -31,11 +31,11 @@ const SortButtons = styled.div`
 const SortButton = styled.button`
   padding: 0.5rem 1rem;
   border: 1px solid #007bff;
-  background: ${props => props.active ? '#007bff' : 'white'};
-  color: ${props => props.active ? 'white' : '#007bff'};
+  background: ${(props) => (props.active ? "#007bff" : "white")};
+  color: ${(props) => (props.active ? "white" : "#007bff")};
   border-radius: 4px;
   cursor: pointer;
-  
+
   &:hover {
     background: #007bff;
     color: white;
@@ -45,7 +45,7 @@ const SortButton = styled.button`
 const PostCard = styled.div`
   background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   overflow: hidden;
 `;
@@ -105,11 +105,11 @@ const ActionButton = styled.button`
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 4px;
-  
+
   &:hover {
     background: #f8f9fa;
   }
-  
+
   &.active {
     color: #007bff;
   }
@@ -131,11 +131,11 @@ const EmptyMessage = styled.div`
   text-align: center;
   padding: 2rem;
   color: #666;
-  
+
   a {
     color: #007bff;
     text-decoration: none;
-    
+
     &:hover {
       text-decoration: underline;
     }
@@ -146,13 +146,13 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortBy, setSortBy] = useState('new');
+  const [sortBy, setSortBy] = useState("new");
   const { isAuthenticated } = useAuth();
 
-  const fetchPosts = async (sort = 'new') => {
+  const fetchPosts = async (sort = "new") => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const result = await HaivlerAPI.getPosts(0, 10, sort);
       if (result.success) {
@@ -161,7 +161,7 @@ const Home = () => {
         setError(result.error);
       }
     } catch (error) {
-      setError('Failed to fetch posts');
+      setError("Failed to fetch posts");
     } finally {
       setLoading(false);
     }
@@ -177,7 +177,7 @@ const Home = () => {
 
   const handleReaction = async (postId, reactionType) => {
     if (!isAuthenticated) {
-      toast.error('Please login to react to posts');
+      toast.error("Please login to react to posts");
       return;
     }
 
@@ -186,12 +186,14 @@ const Home = () => {
       if (result.success) {
         // Refresh posts to update reaction counts
         fetchPosts(sortBy);
-        toast.success(`${reactionType === 'like' ? 'Liked' : 'Disliked'} post!`);
+        toast.success(
+          `${reactionType === "like" ? "Liked" : "Disliked"} post!`
+        );
       } else {
         toast.error(result.error);
       }
     } catch (error) {
-      toast.error('Failed to update reaction');
+      toast.error("Failed to update reaction");
     }
   };
 
@@ -208,15 +210,15 @@ const Home = () => {
       <Header>
         <Title>Latest Posts</Title>
         <SortButtons>
-          <SortButton 
-            active={sortBy === 'new'} 
-            onClick={() => handleSort('new')}
+          <SortButton
+            active={sortBy === "new"}
+            onClick={() => handleSort("new")}
           >
             New
           </SortButton>
-          <SortButton 
-            active={sortBy === 'popular'} 
-            onClick={() => handleSort('popular')}
+          <SortButton
+            active={sortBy === "popular"}
+            onClick={() => handleSort("popular")}
           >
             Popular
           </SortButton>
@@ -228,44 +230,48 @@ const Home = () => {
           No posts yet. <Link to="/create-post">Create the first post!</Link>
         </EmptyMessage>
       ) : (
-        posts.map((post) => (
-          <PostCard key={post.id}>
-            <PostHeader>
-              <UserInfo>
-                <FaUser />
-                <span>{post.user?.username || 'Unknown User'}</span>
-                <span>•</span>
-                <span>{new Date(post.created_at).toLocaleDateString()}</span>
-              </UserInfo>
-            </PostHeader>
-            
-            <PostImage src={post.image_url} alt={post.title} />
-            
-            <PostContent>
-              <PostTitle>{post.title}</PostTitle>
-              {post.description && (
-                <PostDescription>{post.description}</PostDescription>
-              )}
-            </PostContent>
-            
-            <PostActions>
-              <ActionButton onClick={() => handleReaction(post.id, 'like')}>
-                <FaThumbsUp />
-                <span>{post.like_count || 0}</span>
-              </ActionButton>
-              
-              <ActionButton onClick={() => handleReaction(post.id, 'dislike')}>
-                <FaThumbsDown />
-                <span>{post.dislike_count || 0}</span>
-              </ActionButton>
-              
-              <ActionButton as={Link} to={`/post/${post.id}`}>
-                <FaComment />
-                <span>Comments</span>
-              </ActionButton>
-            </PostActions>
-          </PostCard>
-        ))
+        posts.map((post) => {
+          return (
+            <PostCard key={post.id}>
+              <PostHeader>
+                <UserInfo>
+                  <FaUser />
+                  <span>{post.user?.username || "Unknown User"}</span>
+                  <span>•</span>
+                  <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                </UserInfo>
+              </PostHeader>
+
+              <PostImage src={post.image_url} alt={post.title} />
+
+              <PostContent>
+                <PostTitle>{post.title}</PostTitle>
+                {post.description && (
+                  <PostDescription>{post.description}</PostDescription>
+                )}
+              </PostContent>
+
+              <PostActions>
+                <ActionButton onClick={() => handleReaction(post.id, "like")}>
+                  <FaThumbsUp />
+                  <span>{post.like_count || 0}</span>
+                </ActionButton>
+
+                <ActionButton
+                  onClick={() => handleReaction(post.id, "dislike")}
+                >
+                  <FaThumbsDown />
+                  <span>{post.dislike_count || 0}</span>
+                </ActionButton>
+
+                <ActionButton as={Link} to={`/post/${post.id}`}>
+                  <FaComment />
+                  <span>Comments</span>
+                </ActionButton>
+              </PostActions>
+            </PostCard>
+          );
+        })
       )}
     </HomeContainer>
   );
