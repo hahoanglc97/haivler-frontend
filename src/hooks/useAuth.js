@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import HaivlerAPI from '../services/api';
+import { getCookie } from '../utils/cookiesHelper.ts';
 
 const AuthContext = createContext();
 
@@ -18,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check if user is logged in on app start
     const initAuth = async () => {
-      const token = HaivlerAPI.getToken();
+      const token = getCookie("token");
       if (token) {
         const storedUser = HaivlerAPI.getCurrentUser();
         if (storedUser) {
