@@ -12,6 +12,7 @@ import Register from './components/Register';
 import Profile from './pages/Profile';
 import CreatePost from './pages/CreatePost';
 import PostDetail from './pages/PostDetail';
+import EditPost from './pages/EditPost';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -106,6 +107,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <CreatePost />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/edit-post/:id" 
+            element={
+              <ProtectedRoute>
+                <EditPost />
               </ProtectedRoute>
             } 
           />

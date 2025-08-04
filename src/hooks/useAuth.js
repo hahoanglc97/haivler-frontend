@@ -30,7 +30,8 @@ export const AuthProvider = ({ children }) => {
           if (result.success) {
             setUser(result.data);
           } else {
-            // Token is invalid, clear it
+            // Token is invalid, clear everything
+            setUser(null);
             HaivlerAPI.logout();
           }
         }

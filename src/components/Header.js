@@ -74,9 +74,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    toast.success('Logged out successfully');
-    navigate('/login');
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout();
+      toast.success('Logged out successfully');
+      navigate('/');
+    }
   };
 
   return (
