@@ -98,7 +98,7 @@ const CurrentImage = styled.div`
 
   img {
     max-width: 100%;
-    max-height: 300px;
+    height: auto;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }

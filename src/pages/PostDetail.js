@@ -51,8 +51,10 @@ const UserInfo = styled.div`
 
 const PostImage = styled.img`
   width: 100%;
-  max-height: 600px;
-  object-fit: cover;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
 `;
 
 const PostContent = styled.div`
