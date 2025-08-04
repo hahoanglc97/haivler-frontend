@@ -377,7 +377,7 @@ const PostDetail = () => {
         <PostHeader>
           <UserInfo>
             <FaUser />
-            <span>{post.user?.username || 'Unknown User'}</span>
+            <span>{post.user?.username || post.username || 'Unknown User'}</span>
             <span>•</span>
             <span>{new Date(post.created_at).toLocaleDateString()}</span>
           </UserInfo>
@@ -449,7 +449,7 @@ const PostDetail = () => {
                 <CommentHeader>
                   <CommentUserInfo>
                     <FaUser />
-                    <span>{comment.user?.username || 'Unknown User'}</span>
+                    <span>{comment.user?.username || comment.username || 'Unknown User'}</span>
                     <span>•</span>
                     <span>{new Date(comment.created_at).toLocaleDateString()}</span>
                   </CommentUserInfo>

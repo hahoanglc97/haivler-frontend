@@ -257,7 +257,7 @@ const Home = () => {
               <PostHeader>
                 <UserInfo>
                   <FaUser />
-                  <span>{post.user?.username || "Unknown User"}</span>
+                  <span>{post.user?.username || post.username || "Unknown User"}</span>
                   <span>•</span>
                   <span>{new Date(post.created_at).toLocaleDateString()}</span>
                 </UserInfo>
