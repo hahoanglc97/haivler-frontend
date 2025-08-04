@@ -6,10 +6,10 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 // Obfuscated endpoint mappings (from backend)
 const OBFUSCATED_ENDPOINTS = {
   REGISTER: "/api/x/1f217a698b25",
-  LOGIN: "/api/v1/auth/login",
+  LOGIN: "/api/x/9592fc5373e2",
   LOGOUT: "/api/x/3f6b4e4dc96d",
   USER_PROFILE: "/api/x/5baaf1c55a0a",
-  POSTS: "/api/v1/posts",
+  POSTS: "/api/x/ff0d498c575b",
   COMMENTS: "/api/x/0ebcf2cda524",
   REACTIONS: "/api/x/7e7cc3288efb",
 };
