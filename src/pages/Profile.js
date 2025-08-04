@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
@@ -89,8 +90,23 @@ const ToggleButton = styled.button`
   }
 `;
 
+const LogoutButton = styled.button`
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 2rem;
+  
+  &:hover {
+    background: #c82333;
+  }
+`;
+
 const Profile = () => {
-  const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
+  const { user, updateUser, logout } = useAuth();
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -161,6 +177,14 @@ const Profile = () => {
     setEditing(false);
   };
 
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      logout();
+      toast.success('Logged out successfully');
+      navigate('/');
+    }
+  };
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -185,9 +209,14 @@ const Profile = () => {
       </UserInfo>
 
       {!editing ? (
-        <ToggleButton onClick={() => setEditing(true)}>
-          Edit Profile
-        </ToggleButton>
+        <div>
+          <ToggleButton onClick={() => setEditing(true)}>
+            Edit Profile
+          </ToggleButton>
+          <LogoutButton onClick={handleLogout}>
+            Logout
+          </LogoutButton>
+        </div>
       ) : (
         <div>
           <h3>Edit Profile</h3>
@@ -224,6 +253,10 @@ const Profile = () => {
           </Form>
         </div>
       )}
+      
+      <LogoutButton onClick={handleLogout}>
+        Logout from Account
+      </LogoutButton>
     </ProfileContainer>
   );
 };

@@ -41,7 +41,10 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Clear all auth data
       deleteCookie("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       window.location.href = "/login";
     }
     return Promise.reject(error);
@@ -104,7 +107,12 @@ class HaivlerAPI {
   }
 
   static logout() {
-    deleteCookie();
+    // Clear token from cookies
+    deleteCookie("token");
+    // Clear user data from localStorage
+    localStorage.removeItem("user");
+    localStorage.removeItem("token"); // In case token was also stored in localStorage
+    // Redirect to login page
     window.location.href = "/login";
   }
 

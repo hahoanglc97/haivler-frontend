@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import styled from "styled-components";
-import { FaThumbsUp, FaThumbsDown, FaComment, FaUser } from "react-icons/fa";
+import { FaThumbsUp, FaThumbsDown, FaComment, FaUser, FaEdit, FaTrash } from "react-icons/fa";
 import HaivlerAPI from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 
@@ -147,7 +147,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("new");
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const fetchPosts = async (sort = "new") => {
     setLoading(true);
@@ -194,6 +194,25 @@ const Home = () => {
       }
     } catch (error) {
       toast.error("Failed to update reaction");
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    try {
+      const result = await HaivlerAPI.deletePost(postId);
+      if (result.success) {
+        // Remove post from local state
+        setPosts(posts.filter(post => post.id !== postId));
+        toast.success('Post deleted successfully!');
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      toast.error('Failed to delete post');
     }
   };
 
@@ -268,6 +287,23 @@ const Home = () => {
                   <FaComment />
                   <span>Comments</span>
                 </ActionButton>
+
+                {/* Add edit/delete buttons for post owner */}
+                {user && post.user_id === user.id && (
+                  <>
+                    <ActionButton as={Link} to={`/edit-post/${post.id}`}>
+                      <FaEdit />
+                      <span>Edit</span>
+                    </ActionButton>
+                    <ActionButton 
+                      onClick={() => handleDeletePost(post.id)}
+                      style={{ color: '#dc3545' }}
+                    >
+                      <FaTrash />
+                      <span>Delete</span>
+                    </ActionButton>
+                  </>
+                )}
               </PostActions>
             </PostCard>
           );

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
-import { FaThumbsUp, FaThumbsDown, FaUser, FaArrowLeft, FaTrash } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown, FaUser, FaArrowLeft, FaTrash, FaEdit } from 'react-icons/fa';
 import HaivlerAPI from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 
@@ -211,6 +211,7 @@ const ErrorMessage = styled.div`
 
 const PostDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [reactions, setReactions] = useState({ like_count: 0, dislike_count: 0 });
@@ -337,6 +338,24 @@ const PostDetail = () => {
     }
   };
 
+  const handleDeletePost = async () => {
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+
+    try {
+      const result = await HaivlerAPI.deletePost(id);
+      if (result.success) {
+        toast.success('Post deleted successfully!');
+        navigate('/');
+      } else {
+        toast.error(result.error);
+      }
+    } catch (error) {
+      toast.error('Failed to delete post');
+    }
+  };
+
   if (loading) {
     return <LoadingMessage>Loading post...</LoadingMessage>;
   }
@@ -360,6 +379,20 @@ const PostDetail = () => {
             <span>•</span>
             <span>{new Date(post.created_at).toLocaleDateString()}</span>
           </UserInfo>
+          {/* Add edit/delete buttons for post owner */}
+          {user && post.user_id === user.id && (
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <ActionButton as={Link} to={`/edit-post/${post.id}`}>
+                <FaEdit />
+              </ActionButton>
+              <ActionButton 
+                onClick={handleDeletePost}
+                style={{ color: '#dc3545' }}
+              >
+                <FaTrash />
+              </ActionButton>
+            </div>
+          )}
         </PostHeader>
         
         <PostImage src={post.image_url} alt={post.title} />
