@@ -186,8 +186,22 @@ const Home = () => {
     try {
       const result = await HaivlerAPI.createReaction(postId, reactionType);
       if (result.success) {
-        // Refresh posts to update reaction counts
-        fetchPosts(sortBy);
+        // Get updated reaction counts for this specific post
+        const reactionsResult = await HaivlerAPI.getReactions(postId);
+        if (reactionsResult.success) {
+          // Update the specific post in the posts array
+          setPosts(prevPosts => 
+            prevPosts.map(post => 
+              post.id === postId 
+                ? { 
+                    ...post, 
+                    like_count: reactionsResult.data.like_count,
+                    dislike_count: reactionsResult.data.dislike_count 
+                  }
+                : post
+            )
+          );
+        }
         toast.success(
           `${reactionType === "like" ? "Liked" : "Disliked"} post!`
         );
